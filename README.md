@@ -25,8 +25,6 @@ I solved 8 of the other 9 challenges, with a write-up for each.
 | DEX | sakarkc2122 | `setTokens` is unprotected: point the DEX at two fake tokens that report a balance of 0 | [test](challenges/test/sakarkc2122-dex/SakarDEXCTFTest.t.sol) · [write-up](challenges/test/sakarkc2122-dex/write-up.md) |
 | Byte Brew | zac369 | A Vyper `concat` memory-corruption bug lets `generate` alter the values copied into `answerSlots`, and the riddle says by how much | [test](challenges/test/zac369-byte-brew/ZacByteBrewTest.t.sol) · [write-up](challenges/test/zac369-byte-brew/write-up.md) |
 
-I also fixed the Pomodoro test in the original repository: [PR #20](https://github.com/luksgrin/secureum-vyper-ctf/pull/20).
-
 ## Running the tests
 
 Each challenge needs the Vyper version listed in its description below. With that `vyper` on your `PATH`:
