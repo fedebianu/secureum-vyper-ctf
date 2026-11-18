@@ -121,14 +121,14 @@ def _getKey(index: uint256) -> bytes32:
 @external
 @nonreentrant("sign")
 def signMarion(receiver: address, index: uint256):
-    assert msg.sender == self.siblingAddresses[MARION] or self.siblingKeys[MARION] == self._getKey(index), "1"
+    assert msg.sender == self.siblingAddresses[MARION] or self.siblingKeys[MARION] == self._getKey(index)
     assert self.currentBlock <= block.number
     self._sign(receiver, msg.sender, index)
 
 @external
 @nonreentrant("sign")
 def signAnna(receiver: address, index: uint256):
-    assert msg.sender == self.siblingAddresses[ANNA] or self.siblingKeys[ANNA] == self._getKey(index), "1"
+    assert msg.sender == self.siblingAddresses[ANNA] or self.siblingKeys[ANNA] == self._getKey(index)
     assert self.currentBlock <= block.number
     self._sign(receiver, msg.sender, index)
 

@@ -1,3 +1,47 @@
+# Secureum Vyper CTF: My Challenge and Solutions
+
+🏆 **Top 3** on the leaderboard and **best write-up** award: [post](https://x.com/fedebianu/status/1774059518806147244)
+
+Secureum's Vyper CTF (February–March 2024) was open to the top 16 of RACE-26: in the first week each participant designed a challenge in Vyper, in the second they solved each other's.
+
+## My challenge: SNAKE Presale
+
+[Challenge](challenges/src/federicobianucci-SNAKE-presale/Presale.vy) · [test](challenges/test/federicobianucci-SNAKE-presale/SNAKEPresaleTest.t.sol)
+
+A token presale that takes WETH through `permit` and pays referrals. WETH9 has no `permit` but has a payable fallback, so any permit "succeeds"; and referral codes index an array of `max_value(uint256)` elements, which wraps around storage. Two referrals overwrite `owner` and `presaleEnd`, and `withdraw()` self-destructs the 100 ETH to the attacker.
+
+## My solutions
+
+I solved 8 of the other 9 challenges, with a write-up for each.
+
+| Challenge | Author | Bug | Solution |
+|---|---|---|---|
+| Pomodoro | 0xjarix | Vyper 0.3.9's `@nonreentrant` lock is broken, so `claimReward` can be re-entered | [exploit](challenges/test/0xjarix-pomodoro/Exploiter.sol) · [test](challenges/test/0xjarix-pomodoro/PomodoroCTFTest.t.sol) · [write-up](challenges/test/0xjarix-pomodoro/write-up.md) |
+| Vexillology | eloi010 | `isSolved` checks the flag with `in`, which is true if any bit matches: inverting `INVERTED` also sets `CAPTURED` | [test](challenges/test/eloi010-vexillology/VexillologyTest.t.sol) · [write-up](challenges/test/eloi010-vexillology/write-up.md) |
+| Crowdfund | m4ttm | The player is the contract's owner, and `burn` lets the owner burn anyone's tokens | [test](challenges/test/m4ttm-crowdfund/CrowdFundTest.t.sol) · [write-up](challenges/test/m4ttm-crowdfund/write-up.md) |
+| Succession | neumoxx | Vyper 0.3.0 compiler bugs let you plant a sibling's key in storage and pass its check; solved both with and without reentrancy | [exploits](challenges/test/neumoxx-succession/) · [test](challenges/test/neumoxx-succession/SuccessionCTFTest.t.sol) · [write-up](challenges/test/neumoxx-succession/write-up.md) |
+| qzpm | qzpm | Shares round down: 19 deposits of 1 wei add assets but no shares, pushing a share's value above 20 | [test](challenges/test/qzpm/CTFTest.t.sol) · [write-up](challenges/test/qzpm/write-up.md) |
+| Vaulty | romeroadrian | Donation attack: ever-larger deposits keep the supply at 1 share, so Alice's 15 ETH deposit rounds down to 0 shares | [test](challenges/test/romeroadrian-vaulty/VaultyTest.t.sol) · [write-up](challenges/test/romeroadrian-vaulty/write-up.md) |
+| DEX | sakarkc2122 | `setTokens` is unprotected: point the DEX at two fake tokens that report a balance of 0 | [test](challenges/test/sakarkc2122-dex/SakarDEXCTFTest.t.sol) · [write-up](challenges/test/sakarkc2122-dex/write-up.md) |
+| Byte Brew | zac369 | A Vyper `concat` memory-corruption bug lets `generate` alter the values copied into `answerSlots`, and the riddle says by how much | [test](challenges/test/zac369-byte-brew/ZacByteBrewTest.t.sol) · [write-up](challenges/test/zac369-byte-brew/write-up.md) |
+
+I also fixed the Pomodoro test in the original repository: [PR #20](https://github.com/luksgrin/secureum-vyper-ctf/pull/20).
+
+## Running the tests
+
+Each challenge needs the Vyper version listed in its description below. With that `vyper` on your `PATH`:
+
+```bash
+cd challenges
+forge test --skip '*.vy' --match-path test/<challenge>/<Test>.t.sol
+```
+
+`--skip '*.vy'` stops recent Foundry versions from compiling the Vyper sources themselves: the tests compile them through `vyper`.
+
+---
+
+*The original README of the CTF follows.*
+
 # Secureum Vyper CTF
 
 ![Secureum-Vyper-CTF-header](img/Secureum-Vyper-CTF-header.png)
